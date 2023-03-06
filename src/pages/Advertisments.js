@@ -128,8 +128,9 @@ const AdvertismentsPage = () => {
       <div>
         <h2 className='font-semibold my-5 text-xl'>Recents</h2>
         {isLoading && <Spinner type="main"/>}
+        {error && <p>{error}</p>}
         {
-          (advertisments && !isLoading) && advertisments.map((advertisment, index) => (
+          (advertisments && !isLoading && !error) && advertisments.map((advertisment, index) => (
             <ul key={advertisment._id} className='flex flex-col border-b space-y-3 py-3'>
               {(advertisment.imagePath !== '') && <img src={advertisment.imagePath} alt='' className='w-[200px] h-[200px] object-contain'/>}
               <li><span className='font-semibold'>Title:</span> {advertisment.title}</li>

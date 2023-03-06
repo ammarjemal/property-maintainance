@@ -3,7 +3,7 @@ import { BellFill } from 'react-bootstrap-icons'
 import SearchBar from '../UI/SearchBar'
 import UserProfile from '../UI/UserProfile'
 
-const Header = () => {
+const Header = (props) => {
   return (
     <div className='w-full py-3 flex justify-between'>
         <div className='flex w-[80%]'>
@@ -13,7 +13,7 @@ const Header = () => {
                 <span className='bg-red-500 rounded-full text-white text-xs w-4 h-4 absolute bottom-[2px] right-[5px] flex justify-center items-center'>5</span>
             </button>
         </div>
-        <UserProfile/>
+        {!props.dashboardLayout && <UserProfile/>}
     </div>
   )
 }

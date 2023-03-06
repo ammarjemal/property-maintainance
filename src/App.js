@@ -1,19 +1,21 @@
 import { Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import MainDashboardPage from "./pages/MainDashboard";
+import DashboardPage from "./pages/Dashboard";
 import ServiceManagementPage from "./pages/ServiceManagement";
 import SecurityPage from "./pages/Security";
 import CustomerSupportPage from "./pages/CustomerSupport";
 import PaymentsPage from "./pages/Payments";
 import AdvertismentsPage from "./pages/Advertisments";
+import DashboardLayout from "./components/Layout/DashboardLayout";
+
 function App() {
   return (
     <div className="App">
       <Switch>
         <Route path='/' exact>
-          <Layout title="">
-            <MainDashboardPage/>
-          </Layout>
+          <DashboardLayout>
+            <DashboardPage/>
+          </DashboardLayout>
         </Route>
         <Route path='/management'>
           <Layout title="Service Management">
