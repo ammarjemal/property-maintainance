@@ -23,7 +23,7 @@ const RightSidebar = (props) => {
                 {props.isLoading && <Spinner type="main"/>}
                 {props.error && <p className='text-center'>{props.error}</p>}
                 {props.posts && props.posts.map((post) => (
-                    <li className='border-b py-3'>
+                    <li className='border-b py-3' key={post._id}>
                         <h3 className='font-semibold pb-2'>{post.title}</h3>
                         <p className='py-2'>{post.description}</p>
                         <span className='text-gray-500 text-sm'>{post.date}</span>
