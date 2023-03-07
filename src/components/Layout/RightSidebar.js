@@ -3,18 +3,24 @@ import { CaretRightFill } from 'react-bootstrap-icons';
 import UserProfile from '../UI/UserProfile';
 import profileImage from '../../assets/gym-guy.png';
 import Spinner from '../UI/Spinner';
-
+import "../../index.css";
+import bg from "../../assets/bg.jpg"
 const RightSidebar = (props) => {
   return (
     <div
         className="h-full flex flex-row sticky top-0 right-0"
         x-data="{ sidenav: true }"
+        style={{backgroundImage: `url(${bg})`, backgroundRepeat: "no-repeat", backgroundSize: "cover"}}
         >
         <div
             id="sidebar"
-            className="bg-gray-100 px-6 h-screen md:block w-30 md:w-60 lg:w-80 overflow-x-hidden transition-transform duration-300 ease-in-out"
+            className="scroll5 bg-gray-100 px-6 h-screen md:block w-24 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out"
             x-show="sidenav"
+            style={{backdropFilter: `blur(20px)`}}
             >
+                {/* <div className={`z-10 sm:z-0 sm:block w-full max-w-full sm:w-[300px] sm:sticky top-0 h-screen`} >
+      <div className='sm:pt-5 h-full w-full flex flex-col justify-between bg-clip-padding bg-opacity-80 bg-slate-100' > */}
+       
             <div className="pt-6">
                 <UserProfile/>                        
             </div>

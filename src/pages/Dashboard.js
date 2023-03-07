@@ -29,8 +29,8 @@ const MainDashboardPage = () => {
             <Card className='col-start-1 col-span-5 bg-blue-500'>
               <div className='h-full flex flex-col justify-between z-10 relative'>
                 <div className='w-full flex justify-between'>
-                  <span className='bg-black/20 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Number of active users</span>
-                  <button className='bg-black/20 flex rounded-md p-2 items-center'><Eye className='mr-2'/>View all</button>
+                  <span className='bg-black/30 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Number of active users</span>
+                  <button className='bg-black/30 hover:bg-black/50 flex rounded-md p-2 items-center'><Eye className='mr-2'/>View all</button>
                 </div>
                 <div>
                   <h1 className='text-6xl font-bold'>56</h1>
@@ -40,7 +40,7 @@ const MainDashboardPage = () => {
             </Card>
             <Card className='col-start-6 col-span-3 bg-rose-500'>
               <div className='h-full flex flex-col justify-between z-10 relative'>
-                <span className='bg-black/20 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Number of active service providers</span>
+                <span className='bg-black/30 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Number of active service providers</span>
                 <div>
                   <h1 className='text-6xl font-bold'>124</h1>
                   <span>Some text here</span>
@@ -49,7 +49,7 @@ const MainDashboardPage = () => {
             </Card>
             <Card className='col-start-9 col-span-3 bg-purple-500'>
               <div className='h-full flex flex-col justify-between z-10 relative'>
-                <span className='bg-black/20 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Completed transactions</span>
+                <span className='bg-black/30 flex items-center w-fit rounded-md p-2'><Bullseye className='mr-2'/> Completed transactions</span>
                 <div>
                   <h1 className='text-6xl font-bold'>24</h1>
                   <span>Some text here</span>
@@ -58,8 +58,8 @@ const MainDashboardPage = () => {
             </Card>
           </div>
         </div>
-        <div className='rounded-lg border mt-14 w-full p-5'>
-          <div className='flex justify-between items-center w-full mb-10'>
+        <div className='rounded-lg border mt-24 w-full p-5'>
+          <div className='flex justify-between items-center w-full mb-16'>
             <h1 className='font-bold text-xl'>Profit Report</h1>
             <div className='space-x-2 flex'>
               <button className='border rounded-md px-3 py-3 flex hover:bg-gray-100'>12 Months</button>

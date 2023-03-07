@@ -1,20 +1,19 @@
 const serverLink = 'http://localhost:5000';
 
 export const addAdvertisment = async (advertismentData, {setError, setSuccess, setIsSubmitting}) => {
-    let newID = null;
-    fetch(`${serverLink}/advertisment/add`, {
-        method: 'POST',
-        body: JSON.stringify(advertismentData),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then((res) => {
-        if(res.ok){
-            setError(null);
-            return res.json();
-        }else{
-            return res.json().then((data) => {
+    let newID = 0;
+    
+    try{
+        const response = await fetch(`${serverLink}/advertisment/add`, {
+            method: 'POST',
+            body: JSON.stringify(advertismentData),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            return response.json().then((data) => {
                 let errorMessage = 'Error adding advertisment!';
                 if (data && data.error || data.error.message) {
                     errorMessage = data.error.message || data.error;
@@ -22,20 +21,17 @@ export const addAdvertisment = async (advertismentData, {setError, setSuccess, s
                 throw new Error(errorMessage);
             });
         }
-    })
-    .then((data) => { // if successful
-        newID = data.newId;
         setSuccess("Advertisment added successfully");
         setError(null);
         setIsSubmitting(false);
-    })
-    .catch((err) => {
+        return data.newId;
+    } catch(err){
         setIsSubmitting(false);
         setSuccess(null);
         console.log(err.message);
         setError(err.message);
-    });
-    return newID;
+        return "";
+    }
 }
 
 export const getAllAdvertisments = async ({setError, setIsLoading}) => {

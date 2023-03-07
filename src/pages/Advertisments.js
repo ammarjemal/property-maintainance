@@ -106,6 +106,7 @@ const AdvertismentsPage = () => {
   const deleteClickHandler = (advertismentId) => {
     setIsConfirmDeleteShown(true);
     setAdvertismentId(advertismentId);
+    console.log(advertismentId);
   }
   useEffect(() => {
     fetchData();
