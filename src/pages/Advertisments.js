@@ -6,6 +6,7 @@ import { CloudArrowUpFill, PlusCircleDotted, Trash } from 'react-bootstrap-icons
 import { addAdvertisment, getAllAdvertisments, changeAdvertismentStatus, uploadImage, deleteAdvertisment } from '../APIs/advertismentAPIs';
 import useInput from '../hooks/use-input';
 import { v4 as uuid } from "uuid";
+import { Confirm } from '../components/UI/Confirm';
 
 const AdvertismentsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,6 +15,8 @@ const AdvertismentsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [advertisments, setAdvertisments] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [isConfirmDeleteShown, setIsConfirmDeleteShown] = useState(false);
+  const [advertismentId, setAdvertismentId] = useState(null);
   const fileInput = useRef();
   const {
     value: title,
@@ -88,24 +91,28 @@ const AdvertismentsPage = () => {
     })
     setAdvertisments(updatedAdvertisments);
   }
-  const deleteAdvertismentHandler = async (advertismentId) => {
-    console.log(advertismentId);
-    // await deleteAdvertisment(advertismentId ,{ setError, setSuccess });
+  const deleteAdvertismentHandler = async () => {
+    await deleteAdvertisment(advertismentId ,{ setError, setSuccess });
+    setIsConfirmDeleteShown(false);
     setAdvertisments(advertisments.filter(advertisment => advertisment._id !== advertismentId));
   }
   const deleteImageHandler = async () => {
     imagePathChangeHandler('');
-    
   }
   const fetchData = useCallback(async () => {
     const advertisments = await getAllAdvertisments({ setError, setIsLoading });
     setAdvertisments(advertisments);
-  }, [])
+  }, []);
+  const deleteClickHandler = (advertismentId) => {
+    setIsConfirmDeleteShown(true);
+    setAdvertismentId(advertismentId);
+  }
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   return (
     <div className='w-3/4'>
+      {isConfirmDeleteShown && <Confirm confirmButtonText="Delete" confirmTitle="Delete" onClick={deleteAdvertismentHandler} onCancel={() => {setIsConfirmDeleteShown(false)}}>Are you sure you want to delete this post?</Confirm>}
       <form onSubmit={addServiceSubmitHandler} className='space-y-8 flex flex-col mt-10'>
         <Input type="text" error={titleIsInValid} onBlur={titleBlurHandler} label="Title" value={title} onChange={titleChangeHandler}/>
         <Textarea label="Description" error={descriptionIsInValid} onBlur={descriptionBlurHandler} value={description} onChange={descriptionChangeHandler}/>
@@ -143,7 +150,7 @@ const AdvertismentsPage = () => {
                   {(advertisment.status === "active") && <span className='ml-2 text-emerald-500'>Active</span>}
                 </span>
                 <span className='flex items-center'>
-                  {<Button onClick={() => deleteAdvertismentHandler(advertisment._id)} className='mr-3 bg-transparent border border-rose-500 text-rose-500 flex items-center' color='white'><Trash className='mr-2'/> Delete</Button>}
+                  {<Button onClick={() => deleteClickHandler(advertisment._id)} className='mr-3 bg-transparent border border-rose-500 text-rose-500 flex items-center' color='white'><Trash className='mr-2'/> Delete</Button>}
                   {(advertisment.status === "not-active") && <Button onClick={() => changeAdvertismentStatusHandler(advertisment._id, advertisment.status, index)} className='bg-emerald-200 text-emerald-600 shadow-[0_4px_9px_-4px_emerald]' color='green'>Activate</Button>}
                   {(advertisment.status === "active") && <Button onClick={() => changeAdvertismentStatusHandler(advertisment._id, advertisment.status, index)} className='bg-rose-200 text-rose-600 shadow-[0_4px_9px_-4px_rose]' color='red'>Deactivate</Button>}
                 </span>

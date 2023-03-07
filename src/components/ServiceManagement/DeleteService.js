@@ -5,6 +5,7 @@ import Spinner from '../UI/Spinner';
 import { Confirm } from '../UI/Confirm';
 import Toast from '../UI/Toast';
 import { getServices, deleteService } from '../../APIs/serviceAPIs';
+import { ArrowCounterclockwise } from 'react-bootstrap-icons';
 const DeleteService = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -49,6 +50,7 @@ const DeleteService = () => {
       {isLoading && <Spinner className="absolute left-0 right-0" type='main'/>}
       {(!error && !services.length && !isLoading) && <p className="text-center text-sm font-semibold absolute left-0 right-0">No services found</p>}
       {(error && !isLoading) && <p className="text-center text-sm font-semibold absolute left-0 right-0">{error}</p>}
+      <button className='text-sm flex items-center hover:bg-gray-100 p-1 rounded-lg' onClick={() => fetchData()}><ArrowCounterclockwise className='mr-1'/>Refresh</button>
       {(!isLoading && !error) && <Table deleteClickHandler={deleteClickHandler} headers={["#", "Service category", "Price","Service type",  "Material required", "Action"]} rows={services}/>}
       {error && <Toast type='error' show={true} setState={setError} message={error}/>}
       {success && <Toast type='success' show={true} setState={setSuccess} message={success}/>}
