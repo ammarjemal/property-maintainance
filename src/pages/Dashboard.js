@@ -4,6 +4,7 @@ import { getAllAdvertisments } from '../APIs/advertismentAPIs';
 import Header from '../components/Layout/Header';
 import RightSidebar from '../components/Layout/RightSidebar';
 import { Activity, Bullseye, Download, Eye } from 'react-bootstrap-icons';
+import Graph from '../components/UI/Graph';
 
 const MainDashboardPage = () => {
   const [advertisments, setAdvertisments] = useState([]);
@@ -58,7 +59,7 @@ const MainDashboardPage = () => {
           </div>
         </div>
         <div className='rounded-lg border mt-14 w-full p-5'>
-          <div className='flex justify-between items-center w-full'>
+          <div className='flex justify-between items-center w-full mb-10'>
             <h1 className='font-bold text-xl'>Profit Report</h1>
             <div className='space-x-2 flex'>
               <button className='border rounded-md px-3 py-3 flex hover:bg-gray-100'>12 Months</button>
@@ -69,6 +70,7 @@ const MainDashboardPage = () => {
             <button className='border rounded-md px-3 py-3 flex items-center hover:bg-gray-100'><Download className='mr-2'/> Export PDF</button>
           </div>
           {/* THE GRAPH HERE */}
+          <Graph/>
         </div>
       </div>
       <RightSidebar posts={advertisments} error={error} isLoading={isLoading}/>
