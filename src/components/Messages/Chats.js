@@ -10,8 +10,9 @@ import noChatFound from "../../assets/no-chats.svg";
 import chatBg from "../../assets/chat-bg.jpg";
 import { ArrowLeftShort } from 'react-bootstrap-icons';
 import useFocus from '../../hooks/use-focus';
+import socketIO from 'socket.io-client';
 // import { Link } from 'react-router-dom';
-
+const socket = socketIO.connect('http://localhost:5000');
 const Chats = (props) => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);

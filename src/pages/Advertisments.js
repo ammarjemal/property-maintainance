@@ -133,8 +133,8 @@ const AdvertismentsPage = () => {
         </div>
         <Button type='submit' className='self-center w-3/12 text-sm py-3 disabled:cursor-not-allowed' disabled={isSubmitting || !formIsValid} color="blue">{isSubmitting ? <Spinner/> : "Post"}</Button>
       </form>
-      <div>
-        <h2 className='font-semibold my-5 text-xl'>Recents</h2>
+      <div className='my-10'>
+        {error && <h2 className='font-semibold my-5 text-xl'>Recents</h2>}
         {isLoading && <Spinner type="main"/>}
         {error && <p>{error}</p>}
         {

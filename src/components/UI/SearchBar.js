@@ -1,8 +1,8 @@
 import React from 'react'
 
-const SearchBar = () => {
+const SearchBar = (props) => {
   return (
-    <div className="flex justify-center w-[80%]">
+    <div className={`flex justify-center ${props.dashboardLayout ? "w-[100%]" : "w-[80%]"}`}>
         <div className="w-full">
             <div className="relative flex flex-wrap items-stretch bg-gray-100 rounded-sm p-1">
             <span

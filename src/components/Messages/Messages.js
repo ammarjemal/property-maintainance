@@ -17,7 +17,7 @@ const Messages = (props) => {
         <Fragment>
             {error && <Toast type='error' show={true} setState={setError} message={error}/>}
             {/* Displayed on the full page */}
-            <div className={`h-screen rounded-3xl w-full flex justify-center`} style={{backgroundImage: `url(${bg})`, backgroundRepeat: "no-repeat"}}>
+            <div className={`h-screen mt-10 rounded-3xl w-full flex justify-center`} style={{backgroundImage: `url(${bg})`, backgroundRepeat: "no-repeat"}}>
                 <div className={`messages-wrapper rounded-3xl bg-inherit h-screen grid grid-cols-12 w-full mb-5 shadow-2xl items-center ${(!isLoading) ? 'justify-start' : 'justify-center'} relative text-zinc-200 ml-0`} style={{backdropFilter: `blur(7px)`}}>
                     {(error && !isLoading) && <p className="text-center text-sm font-semibold">{error}</p>}
                     <UsersList userSelected={userSelected} setUserSelected={setUserSelected} sidebarShown={sidebarShown} setSidebarShown={setSidebarShown} user={props?.user} className="col-span-2 col-start-1 sm:col-span-5 md:col-span-5 h-full overflow-auto overflow-y-auto" /*setUserSelected={setUserSelected}*/ setError={setError} setIsLoading={setIsLoading}/>
