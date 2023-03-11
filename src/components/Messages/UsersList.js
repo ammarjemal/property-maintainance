@@ -1,5 +1,5 @@
 import Spinner from "../UI/Spinner";
-import { useAuth } from "../../store/auth-context";
+import { useAuth } from "../../store/AuthContext";
 import { useEffect, useContext, useState, useCallback, Fragment } from "react";
 import UserItem from "./UserItem";
 import Search from "./Search";

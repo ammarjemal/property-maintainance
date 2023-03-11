@@ -1,7 +1,6 @@
 const serverLink = 'http://localhost:5000';
 
 export const addAdvertisment = async (advertismentData, {setError, setSuccess, setIsSubmitting}) => {
-    let newID = 0;
     
     try{
         const response = await fetch(`${serverLink}/advertisment/add`, {

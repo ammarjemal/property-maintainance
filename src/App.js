@@ -1,4 +1,4 @@
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import DashboardPage from "./pages/Dashboard";
 import ServiceManagementPage from "./pages/ServiceManagement";
@@ -9,10 +9,17 @@ import DashboardLayout from "./components/Layout/DashboardLayout";
 import SocketHome from "./components/Socket/Home";
 import SocketChatPage from "./components/Socket/ChatPage";
 import socketIO from "socket.io-client"
+import Messenger from "./components/Messages/Messenger";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { AuthContext } from "./store/AuthContext";
+import { useContext } from "react";
 
 const socket = socketIO.connect("http://localhost:5000")
 function App() {
-  console.log(socket);
+  const { user } = useContext(AuthContext);
+
+  console.log(user);
   return (
     <div className="App">
       <Switch>
@@ -46,6 +53,15 @@ function App() {
           <Layout title="Advertisments">
             <AdvertismentsPage/>
           </Layout>
+        </Route>
+        <Route path="/register">
+          {user ? <Redirect to="/" /> : <Register />}
+        </Route>
+        <Route path="/login">
+          {user ? <Redirect to="/" /> : <Login />}
+        </Route>
+        <Route path="/messenger">
+          {!user ? <Redirect to="/" /> : <Messenger />}
         </Route>
       </Switch>
     </div>

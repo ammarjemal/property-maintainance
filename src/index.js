@@ -6,7 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 import 'tw-elements';
 import { ThemeProvider } from "@material-tailwind/react";
 import { ChatContextProvider } from './store/chat-context';
-import { AuthContextProvider } from './store/auth-context';
+// import { AuthContextProvider } from './store/auth-context';
+import { AuthContextProvider } from './store/AuthContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
