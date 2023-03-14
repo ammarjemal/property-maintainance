@@ -10,6 +10,7 @@ import { io } from "socket.io-client";
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
+  const [userSelected, setUserSelected] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -51,16 +52,17 @@ export default function Messenger() {
       try {
         // const res = await axios.get(");
         console.log(user._id);
-        const response = await fetch(`http://localhost:5000/conversations/${user._id}`, {
+        const response = await fetch(`http://localhost:5000/conversations/find/${user._id}`, {
           method: 'GET'
         });
         const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.message || 'Could not update service.');
+            throw new Error(data.message || 'Could not get conversations.');
         }
+        console.log(data.conversations);
         if(data.conversations.length){
           // console.log(data.conversations);
-          setConversations(data);
+          setConversations(data.conversations);
         }
       } catch (err) {
         console.log(err);
@@ -91,34 +93,34 @@ export default function Messenger() {
 
   useEffect(() => {
     const getMessages = async () => {
-      // try {
-      //   const response = await fetch(`http://localhost:5000/messages/${currentChat?._id}`, {
-      //     method: 'GET',
-      //   });
-      //   const data = await response.json();
-      //   if (!response.ok) {
-      //       throw new Error(data.message || 'Could not update service.');
-      //   }
-      //   setMessages(response.data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        const response = await fetch(`http://localhost:5000/messages/${currentChat?._id}`, {
+          method: 'GET',
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Could not update service.');
+        }
+        setMessages(data);
+      } catch (err) {
+        console.log(err);
+      }
     };
     getMessages();
   }, [currentChat]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(currentChat);
     const message = {
       sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
-
     const receiverId = currentChat.members.find(
       (member) => member !== user._id
     );
-
+      console.log(socket.current);
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -135,18 +137,18 @@ export default function Messenger() {
       },
     })
     .then((res) => {
-        if(res.ok){
-            return res.json();
-        }else{
-            return res.json().then((data) => {
-                console.log(data);
-                let errorMessage = 'Error on sending message!';
-                if (data && data.error || data.error.message) {
-                    errorMessage = data.error.message || data.error;
-                }
-                throw new Error(errorMessage);
-            });
-        }
+      if(res.ok){
+          return res.json();
+      }else{
+        return res.json().then((data) => {
+          console.log(data);
+          let errorMessage = 'Error on sending message!';
+          if (data && data.error || data.error.message) {
+              errorMessage = data.error.message || data.error;
+          }
+          throw new Error(errorMessage);
+        });
+      }
     }).then((data) => {
       setMessages([...messages, data]);
       setNewMessage("");
@@ -160,7 +162,6 @@ export default function Messenger() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
   return (
     <>
       {/* <Topbar /> */}
@@ -177,7 +178,7 @@ export default function Messenger() {
         </div>
         <div className="chatBox">
           <div className="chatBoxWrapper">
-            {currentChat ? (
+            {userSelected ? (
               <>
                 <div className="chatBoxTop">
                   {messages.map((m) => (
@@ -212,6 +213,7 @@ export default function Messenger() {
               users={users}
               currentId={user._id}
               setCurrentChat={setCurrentChat}
+              setUserSelected={setUserSelected}
             />
           </div>
         </div>

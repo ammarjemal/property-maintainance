@@ -1,12 +1,13 @@
 // import axios from "axios";
 import { useEffect, useState } from "react";
+import { createConversation } from "../../APIs/chatAPIs";
 import "./chatOnline.css";
 
-export default function ChatOnline({ onlineUsers, users, currentId, setCurrentChat }) {
+export default function ChatOnline({ onlineUsers, users, currentId, setCurrentChat, setUserSelected }) {
   // const [users, setUsers] = useState([]);
   const [onlineFriends, setOnlineFriends] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-console.log(users);
+console.log(onlineUsers);
 // useEffect(() => {
 //   const getUsers = async () => {
 //     try {
@@ -40,10 +41,19 @@ console.log(users);
       });
       const data = await response.json();
       if (!response.ok) {
-          throw new Error(data.message || 'Cannot get service.');
+          throw new Error(data.message || 'Cannot get conversation.');
       }
       console.log(data.conversation);
-      setCurrentChat(data.conversation);
+      if(!data.conversation){
+        console.log(currentId, user._id)
+        const newConversation = await createConversation(currentId, user._id);
+        console.log(newConversation);
+        setCurrentChat(newConversation);
+      }else{
+        console.log(data.conversation);
+        setCurrentChat(data.conversation);
+      }
+      setUserSelected(true);
     } catch(error){
       console.log(error);
     }
@@ -58,8 +68,8 @@ console.log(users);
               className="chatOnlineImg"
               src={
                 o?.profilePicture
-                  ? PF + o.profilePicture
-                  : PF + "person/noAvatar.png"
+                  ? "http://localhost:3000/images/" + o.profilePicture
+                  : "http://localhost:3000/images/" + "person/noAvatar.png"
               }
               alt=""
             />

@@ -189,38 +189,38 @@ import "./conversation.css";
 
 export default function Conversation({ conversation, currentUser }) {
   const [user, setUser] = useState(null);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-console.log(conversation, currentUser);
-  useEffect(() => {
-    const friendId = conversation.members.find((m) => m !== currentUser._id);
+//   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+// console.log(conversation, currentUser);
+  // useEffect(() => {
+  //   const friendId = conversation.members.find((m) => m !== currentUser._id);
 
-    const getUser = async () => {
-      try {
-        const response = await fetch(`/users?userId=${friendId}`, {
-            method: 'GET',
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            throw new Error(data.message || 'Could not update service.');
-        }
-        // const res = await axios();
-        console.log(response.data)
-        setUser(response.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUser();
-  }, [currentUser, conversation]);
+  //   const getUser = async () => {
+  //     try {
+  //       const response = await fetch(`/users?userId=${friendId}`, {
+  //           method: 'GET',
+  //       });
+  //       const data = await response.json();
+  //       if (!response.ok) {
+  //           throw new Error(data.message || 'Could not update service.');
+  //       }
+  //       // const res = await axios();
+  //       console.log(response.data)
+  //       setUser(response.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getUser();
+  // }, [currentUser, conversation]);
 
   return (
     <div className="conversation">
       <img
-        className="conversationImg"
+        className="conversationImg border"
         src={
           user?.profilePicture
-            ? PF + user.profilePicture
-            : PF + "person/noAvatar.png"
+            ? "http://localhost:3000/images/" + user.profilePicture
+            : "http://localhost:3000/images/person/noAvatar.png"
         }
         alt=""
       />
