@@ -5,9 +5,8 @@ import Message from "./ChatItem";
 import ChatOnline from "./ChatOnline";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext, useAuth } from "../../store/AuthContext";
-import { io } from "socket.io-client";
 
-export default function Messenger() {
+export default function Messenger({socket}) {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [userSelected, setUserSelected] = useState(false);
@@ -16,17 +15,16 @@ export default function Messenger() {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [users, setUsers] = useState([]);
-  const socket = useRef();
   const { user } = useAuth();
   const scrollRef = useRef();
 
+  console.log(socket);
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
-        createdAt: Date.now(),
+        createdAt: Date.now(), 
       });
     });
   }, []);
@@ -50,8 +48,6 @@ export default function Messenger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        // const res = await axios.get(");
-        console.log(user._id);
         const response = await fetch(`http://localhost:5000/conversations/find/${user._id}`, {
           method: 'GET'
         });
@@ -61,7 +57,6 @@ export default function Messenger() {
         }
         console.log(data.conversations);
         if(data.conversations.length){
-          // console.log(data.conversations);
           setConversations(data.conversations);
         }
       } catch (err) {
@@ -111,7 +106,9 @@ export default function Messenger() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(currentChat);
+    if(newMessage === ''){
+      return;
+    }
     const message = {
       sender: user._id,
       text: newMessage,
@@ -120,7 +117,7 @@ export default function Messenger() {
     const receiverId = currentChat.members.find(
       (member) => member !== user._id
     );
-      console.log(socket.current);
+    console.log(user._id,receiverId,newMessage,);
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -170,7 +167,7 @@ export default function Messenger() {
           <div className="chatMenuWrapper">
             <input placeholder="Search for friends" className="chatMenuInput" />
             {conversations.map((c) => (
-              <div onClick={() => setCurrentChat(c)}>
+              <div key={c._id} onClick={() => setCurrentChat(c)}>
                 <Conversation conversation={c} currentUser={user} />
               </div>
             ))}
@@ -181,6 +178,7 @@ export default function Messenger() {
             {userSelected ? (
               <>
                 <div className="chatBoxTop">
+                  {!messages.length && <p>No chats</p>}
                   {messages.map((m) => (
                     <div ref={scrollRef}>
                       <Message message={m} own={m.sender === user._id} />

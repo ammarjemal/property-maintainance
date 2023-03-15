@@ -35,6 +35,7 @@ console.log(onlineUsers);
 
   const handleClick = async (user) => {
     try{
+      console.log(currentId, user._id);
       const url = `http://localhost:5000/conversations/${currentId}/${user._id}`;
       const response = await fetch(url, {
           method: 'GET',
@@ -61,7 +62,7 @@ console.log(onlineUsers);
 
   return (
     <div className="chatOnline">
-      {users.map((o) => (
+      {users.map((o) => (-
         <div className="chatOnlineFriend" key={o._id} onClick={() => handleClick(o)}>
           <div className="chatOnlineImgContainer">
             <img

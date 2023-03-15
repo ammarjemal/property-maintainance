@@ -1,9 +1,9 @@
 import React from 'react'
 import Messages from '../components/Messages/Messages'
 
-const CustomerSupportPage = () => {
+const CustomerSupportPage = (props) => {
   return (
-    <Messages/>
+    <Messages socket={props.socket}/>
   )
 }
 

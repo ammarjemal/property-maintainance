@@ -8,18 +8,24 @@ import AdvertismentsPage from "./pages/Advertisments";
 import DashboardLayout from "./components/Layout/DashboardLayout";
 import SocketHome from "./components/Socket/Home";
 import SocketChatPage from "./components/Socket/ChatPage";
-import socketIO from "socket.io-client"
+// import socketIO from "socket.io-client"
 import Messenger from "./components/Messages/Messenger";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AuthContext } from "./store/AuthContext";
-import { useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
 
-const socket = socketIO.connect("http://localhost:5000")
 function App() {
+  const socket = useRef();
   const { user } = useContext(AuthContext);
+  const [isConnected, setIsConnected] = useState(false);
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+    setIsConnected(true);
+    console.log(socket.current);
+  }, [])
 
-  console.log(user);
   return (
     <div className="App">
       <Switch>
@@ -35,14 +41,8 @@ function App() {
         </Route>
         <Route path='/support'>
           <Layout title="Customer Support">
-            <CustomerSupportPage socket={socket}/>
+            {isConnected && <CustomerSupportPage socket={socket}/>}
           </Layout>
-        </Route>
-        <Route path='/socket' exact>
-          <SocketHome socket={socket}/>
-        </Route>
-        <Route path='/socket/chat'>
-          <SocketChatPage socket={socket}/>
         </Route>
         <Route path='/payments'>
           <Layout title="Payments and Transactions">
@@ -61,7 +61,7 @@ function App() {
           {user ? <Redirect to="/" /> : <Login />}
         </Route>
         <Route path="/messenger">
-          {!user ? <Redirect to="/" /> : <Messenger />}
+          {!user ? <Redirect to="/" /> : isConnected && <Messenger socket={socket}/>}
         </Route>
       </Switch>
     </div>
