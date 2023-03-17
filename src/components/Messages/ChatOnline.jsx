@@ -1,7 +1,7 @@
 // import axios from "axios";
 import { useEffect, useState } from "react";
 import { createConversation } from "../../APIs/chatAPIs";
-import "./chatOnline.css";
+// import "./chatOnline.css";
 
 export default function ChatOnline({ onlineUsers, users, currentId, setCurrentChat, setUserSelected }) {
   // const [users, setUsers] = useState([]);
@@ -62,7 +62,7 @@ console.log(onlineUsers);
 
   return (
     <div className="chatOnline">
-      {users.map((o) => (-
+      {users.map((o) => (
         <div className="chatOnlineFriend" key={o._id} onClick={() => handleClick(o)}>
           <div className="chatOnlineImgContainer">
             <img
