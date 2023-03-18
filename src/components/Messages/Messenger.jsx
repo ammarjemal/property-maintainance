@@ -1,11 +1,10 @@
-// import "./messenger.css";
+import "./messenger.css";
 // import Topbar from "../../components/topbar/Topbar";
 import Conversation from "./Chats";
 import Message from "./ChatItem";
 import ChatOnline from "./ChatOnline";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext, useAuth } from "../../store/AuthContext";
-import { sendMessage } from "../../APIs/chatAPIs";
 
 export default function Messenger({socket}) {
   const [conversations, setConversations] = useState([]);
@@ -127,7 +126,33 @@ export default function Messenger({socket}) {
 
       // const res = await axios.post("/messages", message);
       
-    await sendMessage(message, messages, setMessages, setNewMessage);
+    fetch(`http://localhost:5000/messages`, {
+      method: 'POST',
+      body: JSON.stringify(message),
+      headers: {
+          'Content-Type': 'application/json',
+      },
+    })
+    .then((res) => {
+      if(res.ok){
+          return res.json();
+      }else{
+        return res.json().then((data) => {
+          console.log(data);
+          let errorMessage = 'Error on sending message!';
+          if (data && data.error || data.error.message) {
+              errorMessage = data.error.message || data.error;
+          }
+          throw new Error(errorMessage);
+        });
+      }
+    }).then((data) => {
+      setMessages([...messages, data]);
+      setNewMessage("");
+
+    }).catch(err => {
+      console.log(err);
+    })
 
   };
 

@@ -3,7 +3,7 @@ import ChatItem from './ChatItem';
 // import { onSnapshot, serverTimestamp, doc, arrayUnion, Timestamp, updateDoc } from 'firebase/firestore';
 import Spinner from '../UI/Spinner';
 // import { db} from '../../firebase';
-import { useAuth } from "../../store/auth-context";
+import { useAuth } from "../../store/AuthContext";
 import { ChatContext } from '../../store/chat-context';
 import { v4 as uuid } from "uuid";
 import noChatFound from "../../assets/no-chats.svg";
@@ -13,19 +13,24 @@ import useFocus from '../../hooks/use-focus';
 import { getMessages, sendMessage } from '../../APIs/chatAPIs';
 const Chats = (props) => {
   const { currentChat, socket, user } = props;
+  console.log(socket);
   console.log(user);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const { currentUser } = useAuth();
+  // console.log(currentUser);
   // const { sidebarShown, setSidebarShown, setUserSelected } = props;
   const [arrivalMessage, setArrivalMessage] = useState(null);
   // const { currentUser } = useAuth();
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [message, setMessageText] = useState('');
   // const { data } = useContext(ChatContext);
   const [inputRef, setInputFocus] = useFocus();
   const scrollRef = useRef();
   useEffect(() => {
+    console.log("AA");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -36,9 +41,11 @@ const Chats = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log(arrivalMessage);
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
+      console.log(arrivalMessage, currentChat);
   }, [arrivalMessage, currentChat]);
 
   // useEffect(() => {
@@ -66,17 +73,15 @@ const Chats = (props) => {
       return;
     }
     const message = {
-      sender: user._id,
+      sender: currentUser._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
     console.log(message);
-    const receiverId = currentChat.members.find(
-      (member) => member !== user._id
-    );
-    console.log(user._id,receiverId,newMessage);
+    const receiverId = user._id;
+    console.log(currentUser._id,receiverId,newMessage);
     socket.current.emit("sendMessage", {
-      senderId: user._id,
+      senderId: currentUser._id,
       receiverId,
       text: newMessage,
     });
@@ -91,7 +96,6 @@ const Chats = (props) => {
 return (
     <div className={`message rounded-r-3xl h-screen m-0 overflow-y-auto w-full flex flex-col ${props.className}`} style={{backgroundImage: `url(${chatBg})`, backgroundRepeat: "repeat", backgroundSize: "contain"}}>
         {/* Top */}
-        {/* Middle */}
         <div className="message-header sticky top-0 p-2 w-full flex text-slate-600 bg-opacity-10 bg-slate-300" style={{backdropFilter: `blur(5px)`}}>
             {/* Back button */}
             {/* <button onClick={() => {setSidebarShown(true); setUserSelected(false); props.setUser(null);}} className="sm:hidden mr-2"><ArrowLeftShort className="w-6 h-6"/></button> */}
@@ -107,13 +111,14 @@ return (
                 </div>
             </div>
         </div>
-        <div className={`message-content p-1 block overflow-y-auto justify-end ${error && "justify-center items-center"} w-full h-full`}>
+        {/* Middle */}
+        <div className={`message-content relative p-1 block overflow-y-auto justify-end ${error && "justify-center items-center"} w-full h-full`}>
             {error && <p className='font-semibold text-sm'>{error}</p>}
             {(!error && isLoading) && <Spinner type='main'/>}
-            {(!error && !isLoading && !messages.length) && <div className='m-auto'><img className='w-[150px]' src={noChatFound} alt=''/><p className='text-sm text-center mt-2 font-semibold text-slate-600'>No messages yet</p></div>}
+            {(!error && !isLoading && !messages.length) && <div className='m-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'><img className='w-[150px]' src={noChatFound} alt=''/><p className='text-sm text-center mt-2 font-semibold text-slate-600'>No messages yet</p></div>}
             {(!error && !isLoading) && messages.map((message) => (
-              <div ref={scrollRef}>
-                <ChatItem message={message} own={message.sender === user._id} key={message._id}/>
+              <div ref={scrollRef} key={message._id}>
+                <ChatItem message={message} key={message._id} own={message.sender === user._id}/>
               </div>
             ))}
         </div>
